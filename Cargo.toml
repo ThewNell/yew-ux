@@ -1,0 +1,6 @@
+[workspace]
+
+members = [
+    "component-lib",
+    "insidiae-app"
+]
