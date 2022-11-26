@@ -1,6 +1,7 @@
 use yew::prelude::*;
-use crate::card::comp::{
-    Card, CardBody, CardFooter, CardHeader, CardText, CardTitle,
+use crate::card::{
+    body::CardBody, card::Card, footer::CardFooter, header::CardHeader,
+    text::CardText, title::CardTitle,
 };
 
 mod card;
@@ -18,13 +19,8 @@ fn App() -> Html {
                 <CardBody>
                     <CardTitle />
                     <CardText />
-                    <a href={ "#" } class={ "btn btn-primary" }>
-                        { "Button" }
-                    </a>
                 </CardBody>
-                <CardFooter>
-                    { "Some Footer Content" }
-                </CardFooter>
+                <CardFooter />
             </Card>
         </div>
     }
