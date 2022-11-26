@@ -1,3 +1,4 @@
+use component_lib::form::FormGroup;
 use yew::prelude::*;
 
 fn main() {
@@ -7,6 +8,10 @@ fn main() {
 #[function_component]
 fn App() -> Html {
     html! {
-        <h1>{ "Hello World!" }</h1>
+        <form>
+            <FormGroup>
+                { "Form Group Content" }
+            </FormGroup>
+        </form>
     }
 }

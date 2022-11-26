@@ -1,5 +1,4 @@
 use std::fmt::Display;
-
 use yew::{classes, Classes};
 
 pub enum FormClass {

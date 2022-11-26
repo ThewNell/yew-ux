@@ -18,13 +18,15 @@ pub struct FormControlProps {
     #[prop_or_default]
     pub label: String,
     #[prop_or_default]
-    pub max: f32,
+    pub max: Option<f32>,
     #[prop_or_default]
-    pub min: f32,
+    pub min: Option<f32>,
     #[prop_or_default]
     pub multiple: bool,
     #[prop_or_default]
     pub name: String,
+    #[prop_or_default]
+    pub pattern: String,
     #[prop_or_default]
     pub placeholder: String,
     #[prop_or_default]
@@ -32,7 +34,7 @@ pub struct FormControlProps {
     #[prop_or_default]
     pub source: String,
     #[prop_or_default]
-    pub step: f32,
+    pub step: Option<f32>,
     #[prop_or_default]
     pub title: String,
     #[prop_or_default]
@@ -91,14 +93,15 @@ pub struct FormControlBuilder {
     height: u32,
     id: String,
     input: FormControlType,
-    max: f32,
-    min: f32,
+    max: Option<f32>,
+    min: Option<f32>,
     multiple: bool,
     name: String,
     placeholder: String,
+    pattern: String,
     readonly: bool,
     source: String,
-    step: f32,
+    step: Option<f32>,
     title: String,
     value: String,
     width: u32,
@@ -113,17 +116,25 @@ impl FormControlBuilder {
     pub fn build(self) -> Html {
         let mut input_attrs = vec![
             "<input".to_owned(),
-            format!("class={}", FormClass::FormControl),
             format!("id={}", self.id),
+            format!("type={}", self.input.as_string()),
+            format!("class={}", FormClass::FormControl),
         ];
 
+        // empty attributes
+        if self.disabled || self.readonly {
+            input_attrs.push("disabled".to_owned());
+            input_attrs.push("readonly".to_owned());
+        }
+
+        if self.multiple {
+            input_attrs.push("multiple".to_owned());
+        }
+
+        // value attributes
         if self.alternate.len() > 0 {
             let alt_attr = format!("alt={}", self.alternate);
             input_attrs.push(alt_attr);
-        }
-
-        if self.disabled || self.readonly {
-            input_attrs.push("disabled".to_owned());
         }
 
         if self.height > 0 {
@@ -131,20 +142,24 @@ impl FormControlBuilder {
             input_attrs.push(height_attr);
         }
 
-        input_attrs.push(format!("max={:?}", self.max));
-        input_attrs.push(format!("min={:?}", self.min));
-
-        if self.multiple {
-            input_attrs.push("multiple".to_owned());
+        if self.max.is_some() {
+            let max_attr = format!("max={:?}", self.max.unwrap_or_default());
+            input_attrs.push(max_attr);
         }
 
-        if self.readonly {
-            input_attrs.push("readonly".to_owned());
+        if self.min.is_some() {
+            let min_attr = format!("min={:?}", self.min.unwrap_or_default());
+            input_attrs.push(min_attr);
         }
 
         if self.name.len() > 0 {
             let name_attr = format!("name={:?}", self.name);
             input_attrs.push(name_attr);
+        }
+
+        if self.pattern.len() > 0 {
+            let pattern_attr = format!("pattern={:?}", self.pattern);
+            input_attrs.push(pattern_attr);
         }
 
         if self.placeholder.len() > 0 {
@@ -158,14 +173,15 @@ impl FormControlBuilder {
             input_attrs.push(source_attr);
         }
 
-        input_attrs.push(format!("step={:?}", self.step));
+        if self.step.is_some() {
+            let step_attr = format!("step={:?}", self.step.unwrap_or_default());
+            input_attrs.push(step_attr);
+        }
 
         if self.title.len() > 0 {
             let title_attr = format!("title={:?}", self.title);
             input_attrs.push(title_attr);
         }
-
-        input_attrs.push(format!("type={}", self.input.as_string()));
 
         if self.value.len() > 0 {
             let value_attr = format!("value={:?}", self.value);
@@ -198,12 +214,12 @@ impl FormControlBuilder {
         self
     }
 
-    pub fn max(mut self, max: f32) -> Self {
+    pub fn max(mut self, max: Option<f32>) -> Self {
         self.max = max;
         self
     }
 
-    pub fn min(mut self, min: f32) -> Self {
+    pub fn min(mut self, min: Option<f32>) -> Self {
         self.min = min;
         self
     }
@@ -230,6 +246,11 @@ impl FormControlBuilder {
         self
     }
 
+    pub fn pattern(mut self, pattern: String) -> Self {
+        self.pattern = pattern;
+        self
+    }
+
     pub fn readonly(mut self, readonly: bool) -> Self {
         self.readonly = readonly;
         self
@@ -240,7 +261,7 @@ impl FormControlBuilder {
         self
     }
 
-    pub fn step(mut self, step: f32) -> Self {
+    pub fn step(mut self, step: Option<f32>) -> Self {
         self.step = step;
         self
     }
@@ -282,6 +303,7 @@ impl Component for FormControl {
         let min = ctx.props().min;
         let multiple = ctx.props().multiple;
         let name = ctx.props().name.clone();
+        let pattern = ctx.props().pattern.clone();
         let placeholder = ctx.props().placeholder.clone();
         let readonly = ctx.props().readonly;
         let source = ctx.props().source.clone();
@@ -300,6 +322,7 @@ impl Component for FormControl {
             .min(min)
             .multiple(multiple)
             .name(name)
+            .pattern(pattern)
             .placeholder(placeholder)
             .readonly(readonly)
             .source(source)

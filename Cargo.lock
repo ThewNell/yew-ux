@@ -353,6 +353,7 @@ dependencies = [
 name = "insidiae-app"
 version = "0.1.0"
 dependencies = [
+ "component-lib",
  "yew",
 ]
 
