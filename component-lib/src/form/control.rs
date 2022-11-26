@@ -1,3 +1,5 @@
+use crate::card::title;
+
 use super::style::FormClass;
 use std::fmt::Display;
 use yew::{html, AttrValue, Component, Context, Html, Properties};
@@ -6,6 +8,8 @@ pub struct FormControl;
 
 #[derive(PartialEq, Properties)]
 pub struct FormControlProps {
+    #[prop_or_default]
+    pub alternate: String,
     #[prop_or_default]
     pub disabled: bool,
     pub id: String,
@@ -21,6 +25,10 @@ pub struct FormControlProps {
     pub placeholder: String,
     #[prop_or_default]
     pub readonly: bool,
+    #[prop_or_default]
+    pub source: String,
+    #[prop_or_default]
+    pub title: String,
     #[prop_or_default]
     pub value: String,
 }
@@ -70,6 +78,7 @@ impl FormControlType {
 
 #[derive(Clone, Debug, Default)]
 pub struct FormControlBuilder {
+    alternate: String,
     disabled: bool,
     id: String,
     input: FormControlType,
@@ -77,16 +86,28 @@ pub struct FormControlBuilder {
     name: String,
     placeholder: String,
     readonly: bool,
+    source: String,
+    title: String,
     value: String,
 }
 
 impl FormControlBuilder {
+    pub fn alternate(mut self, alternate: String) -> Self {
+        self.alternate = alternate;
+        self
+    }
+
     pub fn build(self) -> Html {
         let mut input_attrs = vec![
             "<input".to_owned(),
             format!("class={}", FormClass::FormControl),
             format!("id={}", self.id),
         ];
+
+        if self.alternate.len() > 0 {
+            let alt_attr = format!("alt={}", self.alternate);
+            input_attrs.push(alt_attr);
+        }
 
         if self.disabled || self.readonly {
             input_attrs.push("disabled".to_owned());
@@ -101,19 +122,30 @@ impl FormControlBuilder {
         }
 
         if self.name.len() > 0 {
-            let name_attr = format!("name={}", self.name);
+            let name_attr = format!("name={:?}", self.name);
             input_attrs.push(name_attr);
         }
 
         if self.placeholder.len() > 0 {
-            let placeholder_attr = format!("placeholder={}", self.placeholder);
+            let placeholder_attr =
+                format!("placeholder={:?}", self.placeholder);
             input_attrs.push(placeholder_attr);
+        }
+
+        if self.source.len() > 0 {
+            let source_attr = format!("src={:?}", self.source);
+            input_attrs.push(source_attr);
+        }
+
+        if self.title.len() > 0 {
+            let title_attr = format!("title={:?}", self.title);
+            input_attrs.push(title_attr);
         }
 
         input_attrs.push(format!("type={}", self.input.as_string()));
 
         if self.value.len() > 0 {
-            let value_attr = format!("value={}", self.value);
+            let value_attr = format!("value={:?}", self.value);
             input_attrs.push(value_attr);
         }
 
@@ -164,6 +196,16 @@ impl FormControlBuilder {
         self.readonly = readonly;
         self
     }
+
+    pub fn source(mut self, source: String) -> Self {
+        self.source = source;
+        self
+    }
+
+    pub fn title(mut self, title: String) -> Self {
+        self.title = title;
+        self
+    }
 }
 
 // tight tense normal stretchy loose
@@ -177,6 +219,7 @@ impl Component for FormControl {
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
+        let alternate = ctx.props().alternate.clone();
         let disabled = ctx.props().disabled;
         let id = ctx.props().id.clone();
         let input = ctx.props().input.clone();
@@ -185,16 +228,21 @@ impl Component for FormControl {
         let name = ctx.props().name.clone();
         let placeholder = ctx.props().placeholder.clone();
         let readonly = ctx.props().readonly;
+        let source = ctx.props().source.clone();
+        let title = ctx.props().title.clone();
         let value = ctx.props().value.clone();
 
         let label_id = format!("{}Label", id.clone());
         let input_html = FormControlBuilder::new(id.clone())
+            .alternate(alternate)
             .disabled(disabled)
             .input(input)
             .multiple(multiple)
             .name(name)
             .placeholder(placeholder)
             .readonly(readonly)
+            .source(source)
+            .title(title)
             .value(value)
             .build();
 

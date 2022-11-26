@@ -1,6 +1,6 @@
 use crate::{
     card::{Card, CardBody, CardFooter, CardHeader, CardText, CardTitle},
-    form::{FormCheck, FormControl, FormControlType, FormGroup},
+    form::{FormCheck, FormClass, FormControl, FormControlType, FormGroup},
 };
 use yew::prelude::*;
 
@@ -14,14 +14,15 @@ fn main() {
 #[function_component]
 fn App() -> Html {
     let hide_card = true;
-    let hide_button = true;
+    let hide_button = false;
     let hide_check_box = true;
-    let hide_color = true;
-    let hide_date = true;
-    let hide_data_time_local = true;
-    let hide_email = true;
+    let hide_color = false;
+    let hide_date = false;
+    let hide_data_time_local = false;
+    let hide_email = false;
     let hide_file = false;
-    let hide_password = true;
+    let hide_hidden = false;
+    let hide_password = false;
 
     html! {
         <div class={ "container" }>
@@ -86,7 +87,7 @@ fn App() -> Html {
                         input={ FormControlType::Email }
                         label={ "Email Address" }
                         placeholder={ "Enter Email" }
-                        readonly=true />
+                        readonly=false />
                 </FormGroup>
 
                 <FormGroup hidden={ hide_file }>
@@ -99,11 +100,20 @@ fn App() -> Html {
 
                 <FormGroup hidden={ hide_password }>
                     <FormControl
-                        disabled=true
+                        disabled=false
                         id={ "exampleInputPassword1" }
                         input={ FormControlType::Password }
                         label={ "Password" }
                         placeholder={ "Password" } />
+                </FormGroup>
+
+                <FormGroup hidden={ hide_hidden }>
+                    <FormControl
+                        alternate={ "insectoid-male-1" }
+                        id={ "exampleInputImage" }
+                        input={ FormControlType::Image }
+                        source={ "insectoid_male_01_noiseless.png" }
+                        title={ "Not much is known about the Insectoid race.".to_owned() } />
                 </FormGroup>
             </form>
         </div>
