@@ -1,6 +1,6 @@
-use std::fmt::Display;
-use yew::{Component, Properties, html};
 use super::style::FormClass;
+use std::fmt::Display;
+use yew::{html, Component, Properties};
 
 pub struct FormControl;
 
@@ -43,7 +43,7 @@ pub enum FormControlType {
     Text,
     Time,
     Url,
-    Week
+    Week,
 }
 
 impl Display for FormControlType {
@@ -54,11 +54,11 @@ impl Display for FormControlType {
 
 impl FormControlType {
     fn as_string(&self) -> String {
-       match self {
+        match self {
             FormControlType::DateTimeLocal => "datetime-local".to_owned(),
             FormControlType::Telephone => "tel".to_owned(),
             _ => self.to_string().to_lowercase(),
-        } 
+        }
     }
 }
 
@@ -94,12 +94,16 @@ impl Component for FormControl {
                     <input id={ id } type={ input.as_string() } class={ FormClass::FormControl } value={ value } />
                 } else if let FormControlType::Color = input {
                     <input id={ id } type={ input.as_string() } class={ FormClass::FormControl } name={ name } value={ value } />
+                } else if let FormControlType::Date = input {
+                    <input id={ id } type={ input.as_string() } class={ FormClass::FormControl } name={ name } />
+                } else if let FormControlType::DateTimeLocal = input {
+                    <input id={ id } type={ input.as_string() } class={ FormClass::FormControl } name={ name } />
                 } else if let FormControlType::Email = input {
-                    <input id={ id } type={ input.as_string() } class={ FormClass::FormControl } placeholder={ placeholder } />
+                    <input id={ id } type={ input.as_string() } class={ FormClass::FormControl } placeholder={ placeholder } value={ value } />
                 } else if let FormControlType::Text = input {
-                    <input id={ id } type={ input.as_string() } class={ FormClass::FormControl } placeholder={ placeholder } />
+                    <input id={ id } type={ input.as_string() } class={ FormClass::FormControl } placeholder={ placeholder } value={ value } />
                 } else if let FormControlType::Password = input {
-                    <input id={ id } type={ input.as_string() } class={ FormClass::FormControl } placeholder={ placeholder } />
+                    <input id={ id } type={ input.as_string() } class={ FormClass::FormControl } placeholder={ placeholder } value={ value } />
                 } else if let FormControlType::Submit = input {
                     <input id={ id } type={ input.as_string() } class={ FormClass::FormControl } value={ value } />
                 }

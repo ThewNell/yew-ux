@@ -1,4 +1,4 @@
-use std::fmt::{Display, Formatter, self};
+use std::fmt::{self, Display, Formatter};
 use yew::{classes, Classes};
 
 pub enum CardClass {

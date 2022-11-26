@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use yew::{Classes, classes};
+use yew::{classes, Classes};
 
 pub enum FormClass {
     FormCheck,
@@ -19,7 +19,7 @@ impl FormClass {
         match self {
             FormClass::FormCheck => "form-check".to_owned(),
             FormClass::FormControl => "form-control".to_owned(),
-            FormClass::FormGroup => "form-group".to_owned(),            
+            FormClass::FormGroup => "form-group".to_owned(),
         }
     }
 }

@@ -1,12 +1,12 @@
-use yew::{Component, Children, Properties, html};
 use super::style::FormClass;
+use yew::{html, Children, Component, Properties};
 
 pub struct FormGroup;
 
 #[derive(PartialEq, Properties)]
 pub struct FormGroupProps {
     #[prop_or_default]
-    pub children: Children
+    pub children: Children,
 }
 
 impl Component for FormGroup {

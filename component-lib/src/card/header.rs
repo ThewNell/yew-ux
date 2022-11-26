@@ -1,5 +1,5 @@
 use super::style::CardClass;
-use yew::{html, Children, Component, Properties};
+use yew::{html, Children, Component, Html, Properties};
 
 pub struct CardHeader;
 
@@ -17,7 +17,7 @@ impl Component for CardHeader {
         Self
     }
 
-    fn view(&self, ctx: &yew::Context<Self>) -> yew::Html {
+    fn view(&self, ctx: &yew::Context<Self>) -> Html {
         html! {
             <div class={ CardClass::CardHeader }>
                 { for ctx.props().children.iter() }
