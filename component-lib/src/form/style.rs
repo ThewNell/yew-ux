@@ -6,6 +6,8 @@ pub enum FormClass {
     FormCheck,
     FormControl,
     FormGroup,
+    FormLabel,
+    Hidden,
 }
 
 impl Display for FormClass {
@@ -20,6 +22,8 @@ impl FormClass {
             FormClass::FormCheck => "form-check".to_owned(),
             FormClass::FormControl => "form-control".to_owned(),
             FormClass::FormGroup => "form-group".to_owned(),
+            FormClass::FormLabel => "form-label".to_owned(),
+            FormClass::Hidden => "d-none".to_owned(),
         }
     }
 }

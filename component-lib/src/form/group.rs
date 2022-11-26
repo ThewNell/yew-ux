@@ -1,5 +1,5 @@
 use super::style::FormClass;
-use yew::{html, Children, Component, Properties};
+use yew::{classes, html, Children, Component, Properties};
 
 pub struct FormGroup;
 
@@ -7,6 +7,8 @@ pub struct FormGroup;
 pub struct FormGroupProps {
     #[prop_or_default]
     pub children: Children,
+    #[prop_or_default]
+    pub hidden: bool,
 }
 
 impl Component for FormGroup {
@@ -18,8 +20,15 @@ impl Component for FormGroup {
     }
 
     fn view(&self, ctx: &yew::Context<Self>) -> yew::Html {
+        let mut styles = vec![FormClass::FormGroup];
+        if ctx.props().hidden {
+            styles.push(FormClass::Hidden);
+        }
+
+        let classes = classes!(styles);
+
         html! {
-            <div class={ FormClass::FormGroup }>
+            <div class={ classes }>
                 { for ctx.props().children.iter() }
             </div>
         }

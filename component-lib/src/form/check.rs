@@ -1,4 +1,4 @@
-use yew::{html, Children, Component, Properties};
+use yew::{classes, html, Children, Component, Properties};
 
 use super::style::FormClass;
 
@@ -8,6 +8,8 @@ pub struct FormCheck;
 pub struct FormCheckProps {
     #[prop_or_default]
     pub children: Children,
+    #[prop_or_default]
+    pub hidden: bool,
 }
 
 impl Component for FormCheck {
@@ -19,8 +21,15 @@ impl Component for FormCheck {
     }
 
     fn view(&self, ctx: &yew::Context<Self>) -> yew::Html {
+        let mut styles = vec![FormClass::FormCheck];
+        if ctx.props().hidden {
+            styles.push(FormClass::Hidden);
+        }
+
+        let classes = classes!(styles);
+
         html! {
-            <div class={ FormClass::FormCheck }>
+            <div class={ classes }>
                 { for ctx.props().children.iter() }
             </div>
         }

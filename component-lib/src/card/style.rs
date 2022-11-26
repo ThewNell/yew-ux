@@ -21,11 +21,13 @@ pub enum CardClass {
 
     /// Used on \<h*> tags.
     CardTitle,
+
+    Hidden,
 }
 
 impl Display for CardClass {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        write!(f, "{:?}", self.as_string())
+        write!(f, "{}", self.as_string())
     }
 }
 
@@ -47,6 +49,7 @@ impl CardClass {
             CardClass::CardSubtitle => "card-subtitle".to_owned(),
             CardClass::CardText => "card-text".to_owned(),
             CardClass::CardTitle => "card-title".to_owned(),
+            CardClass::Hidden => "d-none".to_owned(),
         }
     }
 }

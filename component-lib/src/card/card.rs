@@ -1,5 +1,5 @@
 use super::style::CardClass;
-use yew::{html, Children, Component, Properties};
+use yew::{classes, html, Children, Component, Properties};
 
 pub struct Card;
 
@@ -7,6 +7,8 @@ pub struct Card;
 pub struct CardProps {
     #[prop_or_default]
     pub children: Children,
+    #[prop_or_default]
+    pub hidden: bool,
 }
 
 impl Component for Card {
@@ -18,8 +20,18 @@ impl Component for Card {
     }
 
     fn view(&self, ctx: &yew::Context<Self>) -> yew::Html {
+        let mut styles = vec![CardClass::Card];
+        if ctx.props().hidden {
+            styles.push(CardClass::Hidden);
+        }
+
+        let styles: Vec<String> =
+            styles.iter().map(|style| style.to_string()).collect();
+
+        let classes = classes!(styles);
+
         html! {
-            <div class={ CardClass::Card }>
+            <div class={ classes }>
                 { for ctx.props().children.iter() }
             </div>
         }
