@@ -1,4 +1,4 @@
-use std::fmt::Display;
+use std::fmt::{Display, Formatter, self};
 use yew::{classes, Classes};
 
 pub enum CardClass {
@@ -24,8 +24,8 @@ pub enum CardClass {
 }
 
 impl Display for CardClass {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{:?}", get_card_class(self))
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        write!(f, "{:?}", self.as_string())
     }
 }
 
@@ -35,16 +35,18 @@ impl Into<Classes> for CardClass {
     }
 }
 
-fn get_card_class(class: &CardClass) -> String {
-    match class {
-        CardClass::Card => "card".to_owned(),
-        CardClass::CardBody => "card-body".to_owned(),
-        CardClass::CardFooter => "card-footer".to_owned(),
-        CardClass::CardHeader => "card-header".to_owned(),
-        CardClass::CardImgTop => "card-img-top".to_owned(),
-        CardClass::CardLink => "card-link".to_string(),
-        CardClass::CardSubtitle => "card-subtitle".to_owned(),
-        CardClass::CardText => "card-text".to_owned(),
-        CardClass::CardTitle => "card-title".to_owned(),
+impl CardClass {
+    fn as_string(&self) -> String {
+        match self {
+            CardClass::Card => "card".to_owned(),
+            CardClass::CardBody => "card-body".to_owned(),
+            CardClass::CardFooter => "card-footer".to_owned(),
+            CardClass::CardHeader => "card-header".to_owned(),
+            CardClass::CardImgTop => "card-img-top".to_owned(),
+            CardClass::CardLink => "card-link".to_string(),
+            CardClass::CardSubtitle => "card-subtitle".to_owned(),
+            CardClass::CardText => "card-text".to_owned(),
+            CardClass::CardTitle => "card-title".to_owned(),
+        }
     }
 }
