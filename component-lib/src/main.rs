@@ -1,13 +1,6 @@
 use crate::{
-    card::{
-        body::CardBody, card::Card, footer::CardFooter, header::CardHeader,
-        text::CardText, title::CardTitle,
-    },
-    form::{
-        check::FormCheck,
-        control::{FormControl, FormControlType},
-        group::FormGroup,
-    },
+    card::{Card, CardBody, CardFooter, CardHeader, CardText, CardTitle},
+    form::{FormCheck, FormControl, FormControlType, FormGroup},
 };
 use yew::prelude::*;
 
