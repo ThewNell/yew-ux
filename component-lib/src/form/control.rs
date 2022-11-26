@@ -1,6 +1,6 @@
 use super::style::FormClass;
 use std::fmt::Display;
-use yew::{html, Component, Properties, Context, Html, AttrValue};
+use yew::{html, AttrValue, Component, Context, Html, Properties};
 
 pub struct FormControl;
 
@@ -88,7 +88,7 @@ impl FormControlBuilder {
             let placeholder_attr = format!("placeholder={}", self.placeholder);
             input_attrs.push(placeholder_attr);
         }
-        
+
         input_attrs.push(format!("type={}", self.input.as_string()));
 
         if self.value.len() > 0 {
@@ -111,7 +111,7 @@ impl FormControlBuilder {
         self.name = name;
         self
     }
-    
+
     pub fn new(id: String) -> Self {
         Self {
             id,
@@ -164,7 +164,7 @@ impl Component for FormControl {
                         { label.clone() }
                     </label>
                 }
-                
+
                 { input_html }
             </>
         }

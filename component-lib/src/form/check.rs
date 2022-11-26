@@ -1,4 +1,4 @@
-use yew::{Properties, Children, Component, html};
+use yew::{html, Children, Component, Properties};
 
 use super::style::FormClass;
 
