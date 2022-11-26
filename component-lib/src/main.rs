@@ -28,6 +28,7 @@ fn App() -> Html {
     let show_date = true;
     let show_date_time_local = true;
     let show_email = true;
+    let show_file = true;
     let show_password = true;
     let show_form = show_button
         || show_check_box
@@ -104,6 +105,15 @@ fn App() -> Html {
                             <FormControl id={ "exampleInputEmail1" } input={ FormControlType::Email }
                                 label={ "Email Address" }
                                 placeholder={ "Enter Email" }>
+                            </FormControl>
+                        </FormGroup>
+                    }
+
+                    if show_file {
+                        <FormGroup>
+                            <FormControl id={ "exampleInputFile1" } input={ FormControlType::File }
+                                label={ "File" }
+                                name={ "File" }>
                             </FormControl>
                         </FormGroup>
                     }

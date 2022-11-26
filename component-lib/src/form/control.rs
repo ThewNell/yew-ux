@@ -1,6 +1,6 @@
 use super::style::FormClass;
 use std::fmt::Display;
-use yew::{html, Component, Properties};
+use yew::{html, Component, Properties, Context, Html, AttrValue};
 
 pub struct FormControl;
 
@@ -62,17 +62,85 @@ impl FormControlType {
     }
 }
 
+#[derive(Clone, Debug, Default)]
+pub struct FormControlBuilder {
+    id: String,
+    input: FormControlType,
+    name: String,
+    placeholder: String,
+    value: String,
+}
+
+impl FormControlBuilder {
+    pub fn build(self) -> Html {
+        let mut input_attrs = vec![
+            "<input".to_owned(),
+            format!("class={}", FormClass::FormControl),
+            format!("id={}", self.id),
+        ];
+
+        if self.name.len() > 0 {
+            let name_attr = format!("name={}", self.name);
+            input_attrs.push(name_attr);
+        }
+
+        if self.placeholder.len() > 0 {
+            let placeholder_attr = format!("placeholder={}", self.placeholder);
+            input_attrs.push(placeholder_attr);
+        }
+        
+        input_attrs.push(format!("type={}", self.input.as_string()));
+
+        if self.value.len() > 0 {
+            let value_attr = format!("value={}", self.value);
+            input_attrs.push(value_attr);
+        }
+
+        input_attrs.push("/>".to_owned());
+        let input_string = input_attrs.join(" ");
+
+        Html::from_html_unchecked(AttrValue::from(input_string))
+    }
+
+    pub fn input(mut self, input: FormControlType) -> Self {
+        self.input = input;
+        self
+    }
+
+    pub fn name(mut self, name: String) -> Self {
+        self.name = name;
+        self
+    }
+    
+    pub fn new(id: String) -> Self {
+        Self {
+            id,
+            ..Default::default()
+        }
+    }
+
+    pub fn placeholder(mut self, placeholder: String) -> Self {
+        self.placeholder = placeholder;
+        self
+    }
+
+    pub fn value(mut self, value: String) -> Self {
+        self.value = value;
+        self
+    }
+}
+
 // tight tense normal stretchy loose
 
 impl Component for FormControl {
     type Message = ();
     type Properties = FormControlProps;
 
-    fn create(_ctx: &yew::Context<Self>) -> Self {
+    fn create(_ctx: &Context<Self>) -> Self {
         Self
     }
 
-    fn view(&self, ctx: &yew::Context<Self>) -> yew::Html {
+    fn view(&self, ctx: &Context<Self>) -> Html {
         let id = ctx.props().id.clone();
         let input = ctx.props().input.clone();
         let label = ctx.props().label.clone();
@@ -82,31 +150,22 @@ impl Component for FormControl {
 
         let label_id = format!("{}Label", id.clone());
 
+        let input_html = FormControlBuilder::new(id.clone())
+            .input(input)
+            .name(name)
+            .placeholder(placeholder)
+            .value(value)
+            .build();
+
         html! {
             <>
                 if label.len() > 0 {
-                    <label id={ label_id.clone() } for={ id.clone() }>
+                    <label id={ label_id } for={ id }>
                         { label.clone() }
                     </label>
                 }
-
-                if let FormControlType::Button = input {
-                    <input id={ id } type={ input.as_string() } class={ FormClass::FormControl } value={ value } />
-                } else if let FormControlType::Color = input {
-                    <input id={ id } type={ input.as_string() } class={ FormClass::FormControl } name={ name } value={ value } />
-                } else if let FormControlType::Date = input {
-                    <input id={ id } type={ input.as_string() } class={ FormClass::FormControl } name={ name } />
-                } else if let FormControlType::DateTimeLocal = input {
-                    <input id={ id } type={ input.as_string() } class={ FormClass::FormControl } name={ name } />
-                } else if let FormControlType::Email = input {
-                    <input id={ id } type={ input.as_string() } class={ FormClass::FormControl } placeholder={ placeholder } value={ value } />
-                } else if let FormControlType::Text = input {
-                    <input id={ id } type={ input.as_string() } class={ FormClass::FormControl } placeholder={ placeholder } value={ value } />
-                } else if let FormControlType::Password = input {
-                    <input id={ id } type={ input.as_string() } class={ FormClass::FormControl } placeholder={ placeholder } value={ value } />
-                } else if let FormControlType::Submit = input {
-                    <input id={ id } type={ input.as_string() } class={ FormClass::FormControl } value={ value } />
-                }
+                
+                { input_html }
             </>
         }
     }
