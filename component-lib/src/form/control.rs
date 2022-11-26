@@ -1,5 +1,3 @@
-use crate::card::title;
-
 use super::style::FormClass;
 use std::fmt::Display;
 use yew::{html, AttrValue, Component, Context, Html, Properties};
@@ -12,11 +10,17 @@ pub struct FormControlProps {
     pub alternate: String,
     #[prop_or_default]
     pub disabled: bool,
+    #[prop_or_default]
+    pub height: u32,
     pub id: String,
     #[prop_or_default]
     pub input: FormControlType,
     #[prop_or_default]
     pub label: String,
+    #[prop_or_default]
+    pub max: f32,
+    #[prop_or_default]
+    pub min: f32,
     #[prop_or_default]
     pub multiple: bool,
     #[prop_or_default]
@@ -28,9 +32,13 @@ pub struct FormControlProps {
     #[prop_or_default]
     pub source: String,
     #[prop_or_default]
+    pub step: f32,
+    #[prop_or_default]
     pub title: String,
     #[prop_or_default]
     pub value: String,
+    #[prop_or_default]
+    pub width: u32,
 }
 
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -80,15 +88,20 @@ impl FormControlType {
 pub struct FormControlBuilder {
     alternate: String,
     disabled: bool,
+    height: u32,
     id: String,
     input: FormControlType,
+    max: f32,
+    min: f32,
     multiple: bool,
     name: String,
     placeholder: String,
     readonly: bool,
     source: String,
+    step: f32,
     title: String,
     value: String,
+    width: u32,
 }
 
 impl FormControlBuilder {
@@ -112,6 +125,14 @@ impl FormControlBuilder {
         if self.disabled || self.readonly {
             input_attrs.push("disabled".to_owned());
         }
+
+        if self.height > 0 {
+            let height_attr = format!("height={:?}", self.height);
+            input_attrs.push(height_attr);
+        }
+
+        input_attrs.push(format!("max={:?}", self.max));
+        input_attrs.push(format!("min={:?}", self.min));
 
         if self.multiple {
             input_attrs.push("multiple".to_owned());
@@ -137,6 +158,8 @@ impl FormControlBuilder {
             input_attrs.push(source_attr);
         }
 
+        input_attrs.push(format!("step={:?}", self.step));
+
         if self.title.len() > 0 {
             let title_attr = format!("title={:?}", self.title);
             input_attrs.push(title_attr);
@@ -147,6 +170,11 @@ impl FormControlBuilder {
         if self.value.len() > 0 {
             let value_attr = format!("value={:?}", self.value);
             input_attrs.push(value_attr);
+        }
+
+        if self.width > 0 {
+            let width_attr = format!("width={:?}", self.width);
+            input_attrs.push(width_attr);
         }
 
         input_attrs.push("/>".to_owned());
@@ -160,8 +188,23 @@ impl FormControlBuilder {
         self
     }
 
+    pub fn height(mut self, height: u32) -> Self {
+        self.height = height;
+        self
+    }
+
     pub fn input(mut self, input: FormControlType) -> Self {
         self.input = input;
+        self
+    }
+
+    pub fn max(mut self, max: f32) -> Self {
+        self.max = max;
+        self
+    }
+
+    pub fn min(mut self, min: f32) -> Self {
+        self.min = min;
         self
     }
 
@@ -187,11 +230,6 @@ impl FormControlBuilder {
         self
     }
 
-    pub fn value(mut self, value: String) -> Self {
-        self.value = value;
-        self
-    }
-
     pub fn readonly(mut self, readonly: bool) -> Self {
         self.readonly = readonly;
         self
@@ -202,8 +240,23 @@ impl FormControlBuilder {
         self
     }
 
+    pub fn step(mut self, step: f32) -> Self {
+        self.step = step;
+        self
+    }
+
     pub fn title(mut self, title: String) -> Self {
         self.title = title;
+        self
+    }
+
+    pub fn value(mut self, value: String) -> Self {
+        self.value = value;
+        self
+    }
+
+    pub fn width(mut self, width: u32) -> Self {
+        self.width = width;
         self
     }
 }
@@ -221,29 +274,39 @@ impl Component for FormControl {
     fn view(&self, ctx: &Context<Self>) -> Html {
         let alternate = ctx.props().alternate.clone();
         let disabled = ctx.props().disabled;
+        let height = ctx.props().height;
         let id = ctx.props().id.clone();
         let input = ctx.props().input.clone();
         let label = ctx.props().label.clone();
+        let max = ctx.props().max;
+        let min = ctx.props().min;
         let multiple = ctx.props().multiple;
         let name = ctx.props().name.clone();
         let placeholder = ctx.props().placeholder.clone();
         let readonly = ctx.props().readonly;
         let source = ctx.props().source.clone();
+        let step = ctx.props().step;
         let title = ctx.props().title.clone();
         let value = ctx.props().value.clone();
+        let width = ctx.props().width;
 
         let label_id = format!("{}Label", id.clone());
         let input_html = FormControlBuilder::new(id.clone())
             .alternate(alternate)
             .disabled(disabled)
+            .height(height)
             .input(input)
+            .max(max)
+            .min(min)
             .multiple(multiple)
             .name(name)
             .placeholder(placeholder)
             .readonly(readonly)
             .source(source)
+            .step(step)
             .title(title)
             .value(value)
+            .width(width)
             .build();
 
         html! {

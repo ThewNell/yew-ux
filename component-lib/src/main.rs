@@ -22,7 +22,11 @@ fn App() -> Html {
     let hide_email = false;
     let hide_file = false;
     let hide_hidden = false;
+    let hide_month = false;
+    let hide_number = false;
     let hide_password = false;
+    let hide_range = false;
+    let hide_reset = false;
 
     html! {
         <div class={ "container" }>
@@ -108,12 +112,50 @@ fn App() -> Html {
                 </FormGroup>
 
                 <FormGroup hidden={ hide_hidden }>
+                    // TODO look into height/width overriding form-control styling
                     <FormControl
                         alternate={ "insectoid-male-1" }
                         id={ "exampleInputImage" }
                         input={ FormControlType::Image }
                         source={ "insectoid_male_01_noiseless.png" }
+                        height=128
+                        width=128
                         title={ "Not much is known about the Insectoid race.".to_owned() } />
+                </FormGroup>
+
+                <FormGroup hidden={ hide_month }>
+                    <FormControl
+                        id={ "exampleInputMonth" }
+                        input={ FormControlType::Month }
+                        name={ "renewalMonth" } />
+                </FormGroup>
+
+                <FormGroup hidden={ hide_number }>
+                    <FormControl
+                        id={ "exampleInputNumber" }
+                        input={ FormControlType::Number }
+                        name={ "someNumber" }
+                        max=30_f32
+                        min=1_f32 />
+                </FormGroup>
+
+                <FormGroup hidden={ hide_range }>
+                    <FormControl
+                        id={ "exampleInputRange" }
+                        input={ FormControlType::Range }
+                        label={ "Some Range"}
+                        name={ "someRange" }
+                        max=10_f32
+                        min=1_f32
+                        step=0.5
+                        value={ "5.0" } />
+                </FormGroup>
+
+                <FormGroup hidden={ hide_reset }>
+                    <FormControl
+                        id={ "exampleInputReset" }
+                        input={ FormControlType::Reset }
+                        value={ "Clear Form" } />
                 </FormGroup>
             </form>
         </div>
